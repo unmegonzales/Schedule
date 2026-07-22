@@ -1,6 +1,232 @@
-<iframe
-    src="https://levylobos.netlify.app/schedule"
-    width="100%"
-    height="900"
-    style="border:none;">
-</iframe>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Lobo Event Center event schedule." />
+  <title>Lobo Event Center | Schedule</title>
+  <style>
+    :root { --cherry:#ba0c2f; --cherry-dark:#7f0620; --silver:#c4c6c8; --ink:#1e2732; --muted:#647080; --paper:#f4f5f7; --line:#d9dde3; --white:#fff; --green:#1d7a46; --shadow:0 14px 35px rgb(27 37 48 / .09); }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    button,input,textarea { font:inherit; }
+    button { cursor:pointer; }
+    .site-header { color:var(--white); background:linear-gradient(115deg,var(--cherry-dark),var(--cherry)); border-bottom:5px solid var(--silver); }
+    .header-inner,.page { max-width:1200px; margin:auto; padding-left:clamp(1rem,4vw,2.5rem); padding-right:clamp(1rem,4vw,2.5rem); }
+    .header-inner { min-height:92px; display:flex; align-items:center; gap:1rem; }
+    .mark { width:48px; height:48px; display:grid; place-items:center; flex:0 0 auto; border:2px solid rgb(255 255 255 / .7); border-radius:50%; font-size:1.25rem; font-weight:800; letter-spacing:-.08em; }
+    .brand { margin-right:auto; }
+    .brand strong,.brand span { display:block; }
+    .brand strong { font-size:1.08rem; text-transform:uppercase; letter-spacing:.075em; }
+    .brand span { margin-top:.15rem; color:rgb(255 255 255 / .78); font-size:.78rem; letter-spacing:.07em; text-transform:uppercase; }
+    .live { display:flex; align-items:center; gap:.5rem; color:#fff; font-size:.8rem; font-weight:700; text-transform:uppercase; letter-spacing:.07em; }
+    .live::before { content:""; width:.6rem; height:.6rem; border-radius:50%; background:#8eedb0; box-shadow:0 0 0 4px rgb(142 237 176 / .18); }
+    .page { padding-top:2rem; padding-bottom:2.8rem; }
+    .eyebrow { margin:0 0 .45rem; color:var(--cherry); font-size:.75rem; font-weight:800; letter-spacing:.11em; text-transform:uppercase; }
+    h1,h2,h3,p { margin-top:0; }
+    h1 { margin-bottom:1.5rem; font-size:clamp(1.65rem,4vw,2.5rem); letter-spacing:-.04em; }
+    h2 { margin-bottom:.4rem; font-size:1.25rem; letter-spacing:-.02em; }
+    .hero { position:relative; overflow:hidden; display:grid; grid-template-columns:minmax(0,1.35fr) minmax(240px,.65fr); gap:2rem; padding:clamp(1.35rem,4vw,2.7rem); color:var(--white); background:linear-gradient(125deg,#242f3c,#3d0a1b); border-radius:1.1rem; box-shadow:var(--shadow); }
+    .hero::after { content:"LOBO"; position:absolute; right:-.06em; bottom:-.37em; color:rgb(255 255 255 / .06); font-size:clamp(5rem,16vw,12rem); font-weight:900; letter-spacing:-.1em; pointer-events:none; }
+    .hero > * { position:relative; z-index:1; }
+    .hero .eyebrow { color:#f7bdcc; }
+    .hero h2 { margin-bottom:.4rem; font-size:clamp(1.65rem,4vw,2.75rem); }
+    .hero-copy { max-width:38rem; margin-bottom:0; color:rgb(255 255 255 / .78); }
+    .event-meta { display:flex; flex-wrap:wrap; gap:.75rem 1.25rem; margin-top:1.2rem; color:#fff; font-size:.93rem; }
+    .event-meta span { display:flex; align-items:center; gap:.38rem; }
+    .event-meta span::before { content:""; width:.42rem; height:.42rem; border-radius:50%; background:var(--silver); }
+    .countdown { align-self:center; min-width:0; padding:1rem; border-left:1px solid rgb(255 255 255 / .25); }
+    .countdown-label { color:#f7bdcc; font-size:.74rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+    .countdown-time { margin:.3rem 0 0; font-size:clamp(1.35rem,4vw,2.25rem); font-weight:750; letter-spacing:-.045em; white-space:nowrap; }
+    .toolbar { display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:1rem; margin-top:2.15rem; margin-bottom:1rem; }
+    .toolbar p { margin:0; color:var(--muted); }
+    .filters { display:flex; flex-wrap:wrap; gap:.45rem; }
+    .filter { padding:.5rem .76rem; border:1px solid var(--line); border-radius:999px; color:var(--muted); background:var(--white); font-size:.82rem; font-weight:700; }
+    .filter[aria-pressed="true"] { color:var(--white); background:var(--cherry); border-color:var(--cherry); }
+    .events { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; }
+    .event-card { min-height:235px; display:flex; flex-direction:column; padding:1.15rem; background:var(--white); border:1px solid var(--line); border-top:4px solid var(--silver); border-radius:.8rem; box-shadow:0 5px 17px rgb(27 37 48 / .045); }
+    .event-card.home { border-top-color:var(--cherry); }
+    .date-block { display:flex; align-items:baseline; gap:.55rem; color:var(--cherry); font-size:.78rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .date-block time { color:var(--ink); font-size:1.75rem; letter-spacing:-.06em; }
+    .event-card h3 { margin:.8rem 0 .4rem; font-size:1.1rem; line-height:1.25; }
+    .event-card p { margin-bottom:.45rem; color:var(--muted); font-size:.9rem; }
+    .badge { display:inline-flex; align-items:center; width:max-content; margin-top:auto; padding:.32rem .5rem; border-radius:999px; background:#f3f4f6; color:#56616e; font-size:.73rem; font-weight:800; letter-spacing:.04em; text-transform:uppercase; }
+    .home .badge { color:var(--cherry); background:#fff1f4; }
+    .empty { grid-column:1/-1; padding:2.2rem; color:var(--muted); text-align:center; background:var(--white); border:1px dashed var(--line); border-radius:.8rem; }
+    .utility-grid { display:grid; grid-template-columns:1.15fr .85fr; gap:1rem; margin-top:2.5rem; }
+    .panel { padding:1.25rem; background:var(--white); border:1px solid var(--line); border-radius:.8rem; box-shadow:0 5px 17px rgb(27 37 48 / .04); }
+    .panel p { color:var(--muted); font-size:.9rem; line-height:1.5; }
+    .form-row { display:flex; align-items:end; flex-wrap:wrap; gap:.65rem; }
+    label { display:grid; gap:.35rem; flex:1 1 230px; color:#3d4855; font-size:.8rem; font-weight:700; }
+    input[type="url"],input[type="text"] { width:100%; min-height:2.55rem; padding:.55rem .65rem; border:1px solid var(--line); border-radius:.45rem; color:var(--ink); background:#fff; }
+    input:focus-visible,button:focus-visible,textarea:focus-visible { outline:3px solid #e6a7b6; outline-offset:2px; }
+    .button { min-height:2.55rem; padding:.55rem .8rem; color:var(--cherry); background:#fff; border:1px solid var(--cherry); border-radius:.45rem; font-weight:800; }
+    .button.primary { color:#fff; background:var(--cherry); }
+    .file-button { display:inline-flex; align-items:center; min-height:2.55rem; padding:.55rem .8rem; color:#fff; background:var(--cherry); border-radius:.45rem; font-size:.9rem; font-weight:800; cursor:pointer; }
+    .file-button input { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+    textarea { width:100%; min-height:100px; padding:.65rem; border:1px solid var(--line); border-radius:.45rem; resize:vertical; }
+    .details { margin-top:.85rem; }
+    summary { color:var(--cherry); font-size:.86rem; font-weight:800; cursor:pointer; }
+    .embed-code { min-height:84px; margin-top:.6rem; background:#242f3c; color:#f6f8fb; border-color:#242f3c; font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:.75rem; }
+    .status { display:flex; gap:.5rem; align-items:center; margin:1rem 0 0; color:var(--muted); font-size:.78rem; }
+    .status::before { content:""; width:.55rem; height:.55rem; border-radius:50%; background:var(--green); }
+    .status.error::before { background:var(--cherry); }
+    footer { padding:1.15rem clamp(1rem,4vw,2.5rem); color:#f5f6f7; background:#202a35; font-size:.82rem; }
+    footer div { max-width:1200px; margin:auto; display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+    @media (max-width:820px) { .events { grid-template-columns:repeat(2,minmax(0,1fr)); } .utility-grid { grid-template-columns:1fr; } }
+    @media (max-width:620px) { .header-inner { min-height:78px; } .live { display:none; } .hero { grid-template-columns:1fr; gap:1rem; } .countdown { padding:0; border-left:0; } .events { grid-template-columns:1fr; } .event-card { min-height:190px; } }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="mark" aria-label="Lobo Event Center">LEC</div>
+      <div class="brand"><strong>Lobo Event Center</strong><span>New Mexico Athletics Operations</span></div>
+      <div class="live">Schedule active</div>
+    </div>
+  </header>
+
+  <main class="page">
+    <p class="eyebrow">Event schedule</p>
+    <h1>Where the Pack gathers next.</h1>
+    <section class="hero" aria-labelledby="next-event-label">
+      <div>
+        <p class="eyebrow" id="next-event-label">Next event</p>
+        <h2 id="next-title">Loading schedule…</h2>
+        <p class="hero-copy" id="next-description">Preparing the next Lobo Event Center event.</p>
+        <div class="event-meta" id="next-meta"></div>
+      </div>
+      <div class="countdown">
+        <div class="countdown-label">Starts in</div>
+        <div class="countdown-time" id="countdown" aria-live="polite">—</div>
+      </div>
+    </section>
+
+    <section aria-labelledby="upcoming-heading">
+      <div class="toolbar">
+        <div><h2 id="upcoming-heading">Upcoming events</h2><p id="event-count">Loading events…</p></div>
+        <div class="filters" aria-label="Schedule filters">
+          <button class="filter" type="button" aria-pressed="true" data-filter="all">All events</button>
+          <button class="filter" type="button" aria-pressed="false" data-filter="home">Home</button>
+          <button class="filter" type="button" aria-pressed="false" data-filter="away">Away</button>
+        </div>
+      </div>
+      <div class="events" id="events" aria-live="polite"></div>
+    </section>
+
+    <section class="utility-grid" aria-label="Schedule tools">
+      <div class="panel">
+        <p class="eyebrow">Calendar source</p>
+        <h2>Use your live ICS schedule</h2>
+        <p>Upload an exported calendar file, or enter a publicly accessible ICS URL. The schedule refreshes without changing the page design.</p>
+        <div class="form-row">
+          <label>ICS feed URL<input id="ics-url" type="url" placeholder="https://example.com/schedule.ics" /></label>
+          <button class="button primary" id="load-url" type="button">Load feed</button>
+          <label class="file-button">Upload .ics<input id="ics-file" type="file" accept=".ics,text/calendar" /></label>
+        </div>
+        <details class="details">
+          <summary>Paste ICS content instead</summary>
+          <textarea id="ics-paste" placeholder="BEGIN:VCALENDAR&#10;BEGIN:VEVENT&#10;SUMMARY:Women's Soccer vs. Rival&#10;DTSTART:20260822T190000&#10;LOCATION:University Stadium&#10;END:VEVENT&#10;END:VCALENDAR"></textarea>
+          <p><button class="button" id="load-paste" type="button">Load pasted calendar</button></p>
+        </details>
+        <div class="status" id="schedule-status">Showing the Lobo Event Center sample schedule.</div>
+      </div>
+      <div class="panel">
+        <p class="eyebrow">Smartsheet embed</p>
+        <h2>Copy the dashboard widget</h2>
+        <p>After hosting this file (for example on GitHub Pages), paste its public URL below. The resulting iframe code can be added to a Smartsheet Dashboard web-content widget.</p>
+        <label>Public schedule URL<input id="embed-url" type="url" placeholder="https://your-account.github.io/Schedule/" /></label>
+        <textarea id="embed-code" class="embed-code" readonly aria-label="Generated iframe code"></textarea>
+        <p><button class="button primary" id="copy-embed" type="button">Copy iframe code</button></p>
+      </div>
+    </section>
+  </main>
+  <footer><div><span>© Lobo Event Center</span><span id="footer-status">Schedule display ready</span></div></footer>
+
+  <script>
+    const sampleEvents = [
+      { summary: 'Women’s Soccer vs. New Mexico State', start: '2026-08-22T19:00:00-06:00', location: 'University Stadium', sport: 'Women’s Soccer', type: 'home' },
+      { summary: 'Football vs. Boise State', start: '2026-09-05T17:30:00-06:00', location: 'University Stadium', sport: 'Football', type: 'home' },
+      { summary: 'Volleyball at Colorado State', start: '2026-09-12T13:00:00-06:00', location: 'Fort Collins, CO', sport: 'Volleyball', type: 'away' },
+      { summary: 'Men’s Soccer vs. Grand Canyon', start: '2026-09-18T18:00:00-06:00', location: 'UNM Soccer Complex', sport: 'Men’s Soccer', type: 'home' },
+      { summary: 'Football at Arizona', start: '2026-09-26T18:00:00-06:00', location: 'Tucson, AZ', sport: 'Football', type: 'away' },
+      { summary: 'Lobo Howl Alumni Celebration', start: '2026-10-03T16:00:00-06:00', location: 'The Pit', sport: 'Community', type: 'home' }
+    ];
+    let events = sampleEvents.map(normalizeEvent);
+    let selectedFilter = 'all';
+
+    const $ = (id) => document.getElementById(id);
+    const escapeHtml = (value = '') => String(value).replace(/[&<>'"]/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[char]));
+    const formatDate = (date) => new Intl.DateTimeFormat('en-US', { weekday:'short', month:'short', day:'numeric' }).format(date);
+    const formatTime = (date) => new Intl.DateTimeFormat('en-US', { hour:'numeric', minute:'2-digit' }).format(date);
+
+    function normalizeEvent(event) {
+      const title = event.summary || 'Lobo Event';
+      const at = /^.*\s(?:at|@)\s/i.test(title);
+      const type = event.type || (at ? 'away' : 'home');
+      const sport = event.sport || ['Football','Soccer','Volleyball','Basketball','Baseball','Softball','Tennis'].find(word => title.toLowerCase().includes(word.toLowerCase())) || 'Lobo Event';
+      return { ...event, date: new Date(event.start), type, sport };
+    }
+
+    function upcoming() { return events.filter(event => !Number.isNaN(event.date) && event.date.getTime() > Date.now() - 7200000).sort((a,b) => a.date - b.date); }
+    function render() {
+      const future = upcoming();
+      const next = future[0];
+      if (next) {
+        $('next-title').textContent = next.summary;
+        $('next-description').textContent = `${next.sport} · ${next.type === 'home' ? 'Home event' : 'Road event'}`;
+        $('next-meta').innerHTML = `<span>${escapeHtml(formatDate(next.date))} · ${escapeHtml(formatTime(next.date))}</span><span>${escapeHtml(next.location || 'Location to be announced')}</span>`;
+      } else {
+        $('next-title').textContent = 'No upcoming events'; $('next-description').textContent = 'Load an ICS schedule to show the next Lobo event.'; $('next-meta').innerHTML = '';
+      }
+      const filtered = selectedFilter === 'all' ? future : future.filter(event => event.type === selectedFilter);
+      $('event-count').textContent = `${filtered.length} ${filtered.length === 1 ? 'event' : 'events'} on the schedule`;
+      $('events').innerHTML = filtered.length ? filtered.map(event => `<article class="event-card ${event.type}"><div class="date-block"><time datetime="${event.date.toISOString()}">${escapeHtml(String(event.date.getDate()).padStart(2,'0'))}</time><span>${escapeHtml(new Intl.DateTimeFormat('en-US',{month:'short'}).format(event.date))}</span></div><h3>${escapeHtml(event.summary)}</h3><p>${escapeHtml(formatTime(event.date))} · ${escapeHtml(event.location || 'Location TBA')}</p><span class="badge">${event.type === 'home' ? 'Home event' : 'Away event'} · ${escapeHtml(event.sport)}</span></article>`).join('') : '<div class="empty">No upcoming events match this filter.</div>';
+      $('footer-status').textContent = `${future.length} upcoming events`;
+      updateCountdown(next);
+    }
+
+    function updateCountdown(next = upcoming()[0]) {
+      if (!next) { $('countdown').textContent = 'Schedule TBD'; return; }
+      let seconds = Math.max(0, Math.floor((next.date - Date.now()) / 1000));
+      const days = Math.floor(seconds / 86400); seconds %= 86400; const hours = Math.floor(seconds / 3600); seconds %= 3600; const minutes = Math.floor(seconds / 60);
+      $('countdown').textContent = days ? `${days}d ${hours}h ${minutes}m` : `${hours}h ${minutes}m`;
+    }
+
+    function unescapeIcs(value = '') { return value.replace(/\\n/gi,' ').replace(/\\,/g,',').replace(/\\;/g,';').replace(/\\\\/g,'\\'); }
+    function parseIcsDate(value) {
+      if (/^\d{8}$/.test(value)) return `${value.slice(0,4)}-${value.slice(4,6)}-${value.slice(6,8)}T12:00:00`;
+      const clean = value.replace(/Z$/, '');
+      if (/^\d{8}T\d{6}/.test(clean)) return `${clean.slice(0,4)}-${clean.slice(4,6)}-${clean.slice(6,8)}T${clean.slice(9,11)}:${clean.slice(11,13)}:${clean.slice(13,15)}${value.endsWith('Z') ? 'Z' : ''}`;
+      return value;
+    }
+    function parseIcs(text) {
+      const lines = text.replace(/\r\n[ \t]/g,'').replace(/\r/g,'').split('\n');
+      const parsed = []; let current = null;
+      for (const line of lines) {
+        if (line === 'BEGIN:VEVENT') { current = {}; continue; }
+        if (line === 'END:VEVENT') { if (current?.DTSTART && current.SUMMARY) parsed.push(normalizeEvent({ summary:unescapeIcs(current.SUMMARY), start:parseIcsDate(current.DTSTART), location:unescapeIcs(current.LOCATION || '') })); current = null; continue; }
+        if (!current) continue;
+        const match = line.match(/^([^:;]+)(?:;[^:]*)?:(.*)$/);
+        if (match && ['DTSTART','SUMMARY','LOCATION'].includes(match[1])) current[match[1]] = match[2];
+      }
+      return parsed.filter(event => !Number.isNaN(event.date));
+    }
+    function loadIcs(text, source) {
+      const parsed = parseIcs(text);
+      if (!parsed.length) throw new Error('No dated VEVENT entries were found in that ICS source.');
+      events = parsed; setStatus(`${parsed.length} events loaded from ${source}.`); render();
+    }
+    function setStatus(message, isError = false) { const status = $('schedule-status'); status.textContent = message; status.classList.toggle('error', isError); }
+    function buildEmbedCode() { const url = $('embed-url').value.trim() || 'https://YOUR-GITHUB-USERNAME.github.io/Schedule/'; $('embed-code').value = `<iframe src="${url}" title="Lobo Event Center schedule" width="100%" height="760" frameborder="0" loading="lazy"></iframe>`; }
+
+    document.querySelectorAll('.filter').forEach(button => button.addEventListener('click', () => { selectedFilter = button.dataset.filter; document.querySelectorAll('.filter').forEach(item => item.setAttribute('aria-pressed', String(item === button))); render(); }));
+    $('ics-file').addEventListener('change', async event => { const file = event.target.files[0]; if (!file) return; try { loadIcs(await file.text(), file.name); } catch (error) { setStatus(error.message, true); } });
+    $('load-paste').addEventListener('click', () => { try { loadIcs($('ics-paste').value, 'pasted calendar'); } catch (error) { setStatus(error.message, true); } });
+    $('load-url').addEventListener('click', async () => { const url = $('ics-url').value.trim(); if (!url) return setStatus('Enter an ICS feed URL first.', true); setStatus('Loading calendar feed…'); try { const response = await fetch(url); if (!response.ok) throw new Error(`The calendar feed returned ${response.status}.`); loadIcs(await response.text(), 'calendar feed'); } catch (error) { setStatus(`${error.message} The feed must allow browser access (CORS).`, true); } });
+    $('embed-url').addEventListener('input', buildEmbedCode);
+    $('copy-embed').addEventListener('click', async () => { try { await navigator.clipboard.writeText($('embed-code').value); $('copy-embed').textContent = 'Copied!'; setTimeout(() => { $('copy-embed').textContent = 'Copy iframe code'; }, 1600); } catch { $('embed-code').select(); document.execCommand('copy'); } });
+    buildEmbedCode(); render(); setInterval(() => updateCountdown(), 30000);
+  </script>
+</body>
+</html>
