@@ -152,6 +152,7 @@
       { summary: 'Football at Arizona', start: '2026-09-26T18:00:00-06:00', location: 'Tucson, AZ', sport: 'Football', type: 'away' },
       { summary: 'Lobo Howl Alumni Celebration', start: '2026-10-03T16:00:00-06:00', location: 'The Pit', sport: 'Community', type: 'home' }
     ];
+    const DEFAULT_ICS_URL = "https://golobos.com/calendar.ashx/calendar.ics";
     let events = sampleEvents.map(normalizeEvent);
     let selectedFilter = 'all';
 
@@ -226,7 +227,40 @@
     $('load-url').addEventListener('click', async () => { const url = $('ics-url').value.trim(); if (!url) return setStatus('Enter an ICS feed URL first.', true); setStatus('Loading calendar feed…'); try { const response = await fetch(url); if (!response.ok) throw new Error(`The calendar feed returned ${response.status}.`); loadIcs(await response.text(), 'calendar feed'); } catch (error) { setStatus(`${error.message} The feed must allow browser access (CORS).`, true); } });
     $('embed-url').addEventListener('input', buildEmbedCode);
     $('copy-embed').addEventListener('click', async () => { try { await navigator.clipboard.writeText($('embed-code').value); $('copy-embed').textContent = 'Copied!'; setTimeout(() => { $('copy-embed').textContent = 'Copy iframe code'; }, 1600); } catch { $('embed-code').select(); document.execCommand('copy'); } });
-    buildEmbedCode(); render(); setInterval(() => updateCountdown(), 30000);
+    buildEmbedCode();
+render();
+
+async function autoLoadSchedule() {
+  $('ics-url').value = DEFAULT_ICS_URL;
+
+  try {
+    setStatus("Loading live GoLobos schedule...");
+
+    const response = await fetch(DEFAULT_ICS_URL);
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const text = await response.text();
+
+    loadIcs(text, "GoLobos Athletics");
+
+  } catch (err) {
+
+    console.warn(err);
+
+    setStatus(
+      "Live schedule unavailable. Showing sample schedule.",
+      true
+    );
+
+  }
+}
+
+autoLoadSchedule();
+
+setInterval(() => updateCountdown(), 30000);
   </script>
 </body>
 </html>
